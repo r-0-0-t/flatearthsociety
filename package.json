@@ -1,0 +1,11 @@
+{
+  "name": "flatearthsociety",
+  "version": "0.0.1",
+  "description": "FES(FlatEarthSociety) is a Dumb Social Site, Where you can post anything you want and See other posts. You can rate the posts too.",
+  "main": "index.js",
+  "scripts": {
+    "test": "fes-test"
+  },
+  "author": "Ishan (2016831017)",
+  "license": "MIT"
+}
