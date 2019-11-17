@@ -1,93 +1,63 @@
 import dbConnection from "../config/database";
 var md5 = require("md5");
-import * as Auth from "../lib/auth";
+import User from "../models/user";
+import Errors from "../lib/errors";
 
 class UsersController {
   static index(req, res) {
-    let sql = "select * from users";
-    dbConnection.query(sql, (error, results) => {
+    User.all((error, results) => {
       if (error) {
-        return res.status(404).json({
-          error: error.message
-        });
+        return Errors.respond_errors(res, error);
       } else {
-        res.render("index", { data: results });
+        res.render("users/index", { data: results });
       }
     });
   }
 
-  static create(req, res) {
-    const { email, password } = req.body;
-    if (email && password) {
-      let password_hash = md5(password);
-      let token = Auth.encode(email, password_hash);
-      dbConnection.query(
-        "INSERT INTO users SET ?",
-        {
-          username: req.body.username,
-          email,
-          password_hash: md5(password)
-        },
-        (err, results) => {
-          if (err) {
-            throw err;
-          } else {
-            res.status(201).json({
-              message: "account created!",
-              token: token
-            });
-          }
-        }
-      );
-    }
+  static create(request, response) {
+    let user = new User(
+      request.body.username,
+      request.body.email,
+      request.body.password
+    );
+
+    user.create((error, token) => {
+      if (error) {
+        return Errors.respond_errors(response, error);
+      } else {
+        response.writeHead(200, {
+          "Set-Cookie": `auth-token=${token}`
+        });
+        response.end();
+      }
+    });
   }
 
-  static show(req, res) {
-    const { id } = req.params;
-    const post = posts.find(post => post.id == id);
-    if (post) {
-      return res.status(200).json({
-        message: `showing post of id ${id}`,
-        post: post
-      });
-    } else {
-      res.status(404).json({
-        error: `no post found with id ${id}.`
-      });
-    }
+  static show(request, response) {
+    const { id } = request.params;
+    User.find(id, (error, results) => {
+      response.send(JSON.stringify(results));
+    });
   }
 
-  static update(req, res) {
-    const { id } = req.params;
-    const post = posts.find(post => post.id == id);
-    if (post) {
-      post.title = req.body.title;
-      post.body = req.body.body;
-      return res.status(201).json({
-        message: "post updated.",
-        post: post
-      });
-    } else {
-      res.status(400).json({
-        error: "unprocessable entity.such post may not exist"
-      });
-    }
+  static update(request, response) {
+    User.update(request.params.id, request.body, (error, results) => {
+      if (error) {
+        return Errors.respond_errors(response, error);
+      } else {
+        response.json(results);
+      }
+    });
   }
 
-  static delete(req, res) {
-    const { id } = req.params;
-    const nposts = posts.find(post => post.id == id);
-    if (post) {
-      const posts = posts.filter(npost => npost !== post);
-      return res.status(200).json({
-        message: "post deleted successfully.",
-        posts: nposts
-      });
-    } else {
-      res.status(400).json({
-        error: "unprocessable entity.such post may not exist"
-      });
-    }
+  static destroy(request, response) {
+    User.destroy(request.params.id, (error, results) => {
+      if (error) {
+        return Errors.respond_errors(response, error);
+      } else {
+        response.json(results);
+      }
+    });
   }
 }
 

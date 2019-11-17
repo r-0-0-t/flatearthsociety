@@ -6,6 +6,9 @@ const router = express.Router();
 
 router.post("/api/v1/users", UsersController.create);
 router.get("/api/v1/users", UsersController.index);
+router.get("/api/v1/users/:id", UsersController.show);
+router.post("/api/v1/users/:id", UsersController.update);
+router.delete("/api/v1/users/:id", UsersController.destroy);
 
 router.get("/api/v1/posts", PostsController.index);
 router.post("/api/v1/posts", PostsController.create);
