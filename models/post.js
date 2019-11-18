@@ -1,6 +1,5 @@
 import dbConnection from "../config/database";
-import md5 from "md5";
-import * as Auth from "../lib/auth";
+import { decode } from "../lib/auth";
 
 const post_table_name = "posts";
 const post_default_params = "title,body,ratings,rate_count";

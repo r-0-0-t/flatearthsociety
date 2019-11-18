@@ -14,6 +14,7 @@ class UsersController {
   }
 
   static create(request, response) {
+    //TODO Handle SQL Injection
     let user = new User(
       request.body.username,
       request.body.email,
@@ -45,13 +46,28 @@ class UsersController {
   }
 
   static update(request, response) {
-    User.update(request.params.id, request.body, (error, results) => {
-      if (error) {
-        return Errors.respond_errors(response, error);
+    //TODO Handle SQL Injection
+    let user = decode(request.headers.authorization);
+    let user_id = request.params.id;
+    if (user) {
+      if (user.id === user_id) {
+        User.update(request.params.id, request.body, (error, results) => {
+          if (error) {
+            return Errors.respond_errors(response, error);
+          } else {
+            response.json(results);
+          }
+        });
       } else {
-        response.json(results);
+        response.json({
+          message: "Permission Denied."
+        });
       }
-    });
+    } else {
+      response.json({
+        message: "Invalid User"
+      });
+    }
   }
 
   static destroy(request, response) {

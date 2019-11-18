@@ -28,7 +28,9 @@ class SessionsController {
               };
               response.end(JSON.stringify(message));
             } else {
-              response.redirect("localhost:7000/");
+              response.json({
+                message: "Not a valid username/password!"
+              });
             }
           } else {
             response.json({

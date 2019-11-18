@@ -14,8 +14,8 @@ dbConnection.connect(function(err) {
 
   let usersTableSQL = `create table if not exists users(
                           id integer primary key auto_increment,
-                          username varchar(255) not null,
-                          email varchar(255) not null,
+                          username varchar(255) not null unique,
+                          email varchar(255) not null unique,
                           password_hash varchar(255) not null )`;
   let postsTableSQL = `create table if not exists posts(
                             id integer primary key auto_increment,
