@@ -1,6 +1,7 @@
 import User from "../models/user";
 import Errors from "../lib/errors";
 import md5 from "md5";
+import { encode } from "../lib/auth";
 
 class SessionsController {
   static create(request, response) {
@@ -15,6 +16,7 @@ class SessionsController {
           let user = results[0];
           if (user) {
             let password_hash = user.password_hash;
+            let token = encode(user);
             if (password === password_hash) {
               response.json({
                 message: "Logged In successfully",
