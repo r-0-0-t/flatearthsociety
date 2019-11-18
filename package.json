@@ -4,11 +4,14 @@
   "description": "FES(FlatEarthSociety) is a Dumb Social Site, Where you can post anything you want and See other posts. You can rate the posts too.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon transpiled/index.js"
+    "backend": "nodemon transpiled/index.js",
+    "frontend": "cd frontend && yarn start",
+    "dev": "concurrently \"npm backend\" \"npm frontend\""
   },
   "author": "Ishan (2016831017)",
   "license": "MIT",
   "dependencies": {
+    "concurrently": "^5.0.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
