@@ -1,85 +1,69 @@
-import posts from "../models/post";
-import dbConnection from "../config/database";
-import moment from "moment";
+import Post from "../models/post";
+import Errors from "../lib/errors";
+import { decode } from "../lib/auth";
 
 class PostsController {
-  static index(req, res) {
-    let sql = "select * from users";
-    dbConnection.query(sql, (error, results, fields) => {
+  static index(request, response) {
+    Post.all((error, results) => {
       if (error) {
-        return res.status(404).json({
-          error: error.message
-        });
+        return Errors.respond_errors(response, error);
       } else {
-        return res.status(200).json({
-          message: "success",
-          data: results
-        });
+        response.json(results);
       }
     });
   }
 
-  static create(req, res) {
-    const id = parseInt(posts.length) + 1;
-    const { title, body } = req.body;
-    const post = {
-      id: id,
-      title,
-      body,
-      created_at: moment.utc().format()
-    };
-    posts.push(post);
-    return res.status(201).json({
-      message: "post successful."
+  static create(request, response) {
+    let user = decode(request.headers.authorization);
+    if (user) {
+      let post = new Post(request.body.title, request.body.body, user.username);
+
+      post.create((error, token) => {
+        if (error) {
+          return Errors.respond_errors(response, error);
+        } else {
+          response.json({
+            message: "Post Created Successfully",
+            post: {
+              title: `${post.title}`,
+              body: `${post.body}`,
+              author: `${user.username}`
+            }
+          });
+        }
+      });
+    } else {
+      response.json({
+        message: "Invalid User!"
+      });
+    }
+  }
+
+  static show(request, response) {
+    const { id } = request.params;
+    Post.find(id, (error, results) => {
+      response.send(JSON.stringify(results));
     });
   }
 
-  static show(req, res) {
-    const { id } = req.params;
-    const post = posts.find(post => post.id == id);
-    if (post) {
-      return res.status(200).json({
-        message: `showing post of id ${id}`,
-        post: post
-      });
-    } else {
-      res.status(404).json({
-        error: `no post found with id ${id}.`
-      });
-    }
+  static update(request, response) {
+    Post.update(request.params.id, request.body, (error, results) => {
+      if (error) {
+        return Errors.respond_errors(response, error);
+      } else {
+        response.json(results);
+      }
+    });
   }
 
-  static update(req, res) {
-    const { id } = req.params;
-    const post = posts.find(post => post.id == id);
-    if (post) {
-      post.title = req.body.title;
-      post.body = req.body.body;
-      return res.status(201).json({
-        message: "post updated.",
-        post: post
-      });
-    } else {
-      res.status(400).json({
-        error: "unprocessable entity.such post may not exist"
-      });
-    }
-  }
-
-  static delete(req, res) {
-    const { id } = req.params;
-    const nposts = posts.find(post => post.id == id);
-    if (post) {
-      const posts = posts.filter(npost => npost !== post);
-      return res.status(200).json({
-        message: "post deleted successfully.",
-        posts: nposts
-      });
-    } else {
-      res.status(400).json({
-        error: "unprocessable entity.such post may not exist"
-      });
-    }
+  static destroy(request, response) {
+    Post.destroy(request.params.id, (error, results) => {
+      if (error) {
+        return Errors.respond_errors(response, error);
+      } else {
+        response.json(results);
+      }
+    });
   }
 }
 

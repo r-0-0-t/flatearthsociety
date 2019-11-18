@@ -1,15 +1,14 @@
-import dbConnection from "../config/database";
-var md5 = require("md5");
 import User from "../models/user";
 import Errors from "../lib/errors";
+import { encode } from "../lib/auth";
 
 class UsersController {
-  static index(req, res) {
+  static index(request, response) {
     User.all((error, results) => {
       if (error) {
-        return Errors.respond_errors(res, error);
+        return Errors.respond_errors(response, error);
       } else {
-        res.render("users/index", { data: results });
+        response.json(results);
       }
     });
   }
@@ -21,14 +20,19 @@ class UsersController {
       request.body.password
     );
 
-    user.create((error, token) => {
+    user.create((error, results) => {
       if (error) {
         return Errors.respond_errors(response, error);
       } else {
-        response.writeHead(200, {
-          "Set-Cookie": `auth-token=${token}`
+        let token = encode(user);
+        response.json({
+          message: "Account Created Successfully",
+          token,
+          user: {
+            username: `${user.username}`,
+            email: `${user.email}`
+          }
         });
-        response.end();
       }
     });
   }

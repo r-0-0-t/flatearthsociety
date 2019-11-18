@@ -1,6 +1,7 @@
 import express from "express";
 import PostsController from "../controllers/posts_controller";
 import UsersController from "../controllers/users_controller";
+import SessionsController from "../controllers/sessions_controller";
 
 const router = express.Router();
 
@@ -14,6 +15,8 @@ router.get("/api/v1/posts", PostsController.index);
 router.post("/api/v1/posts", PostsController.create);
 router.get("/api/v1/posts/:id", PostsController.show);
 router.put("/api/v1/posts/:id", PostsController.update);
-router.delete("/api/v1/posts/:id", PostsController.delete);
+router.delete("/api/v1/posts/:id", PostsController.destroy);
+
+router.post("/api/v1/sessions", SessionsController.create);
 
 export default router;
