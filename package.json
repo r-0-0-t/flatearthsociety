@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "backend": "nodemon transpiled/index.js",
-    "frontend": "cd frontend && yarn start",
-    "dev": "concurrently \"npm backend\" \"npm frontend\""
+    "frontend": "cd frontend && npm start",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "author": "Ishan (2016831017)",
   "license": "MIT",
