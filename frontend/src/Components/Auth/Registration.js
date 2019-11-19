@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Axios from "axios";
 
-class Login extends Component {
+class Registration extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       username: "",
       password: "",
+      email: "",
       loggedIn: false
     };
 
@@ -25,7 +26,7 @@ class Login extends Component {
   onSubmitForm = event => {
     event.preventDefault();
     const data = this.state;
-    Axios.post("/sessions", data).then(response => {
+    Axios.post("/users", data).then(response => {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         this.setState({
@@ -51,6 +52,14 @@ class Login extends Component {
           />
           <br />
           <input
+            type="email"
+            placeholder="email"
+            name="email"
+            value={this.state.email}
+            onChange={this.onChange}
+          />
+          <br />
+          <input
             type="password"
             placeholder="password"
             name="password"
@@ -58,11 +67,11 @@ class Login extends Component {
             onChange={this.onChange}
           />
           <br />
-          <input type="submit" value="Login" />
+          <input type="submit" value="Registration" />
         </form>
       </div>
     );
   }
 }
 
-export default Login;
+export default Registration;

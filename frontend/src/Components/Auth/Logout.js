@@ -12,7 +12,7 @@ class Logout extends Component {
   refresh() {}
   render() {
     return (
-      <div>
+      <div align="center">
         <h3>You've been logged out</h3>
         <Link to="/">Login Again</Link>
       </div>

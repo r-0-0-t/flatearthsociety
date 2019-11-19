@@ -83,7 +83,7 @@ class UpdateProfile extends Component {
             value={this.state.username}
             onChange={this.onChange}
           />
-          <input type="submit" />
+          <input type="submit" value="Update" />
         </form>
         <br />
         <form onSubmit={this.onSubmitEmailChange}>
@@ -95,7 +95,7 @@ class UpdateProfile extends Component {
             value={this.state.email}
             onChange={this.onChange}
           />
-          <input type="submit" />
+          <input type="submit" value="Update" />
         </form>
         <br />
         <form onSubmit={this.onSubmitPasswordChange}>
@@ -107,7 +107,7 @@ class UpdateProfile extends Component {
             value={this.state.password}
             onChange={this.onChange}
           />
-          <input type="submit" />
+          <input type="submit" value="Update" />
         </form>
         <br />
       </div>

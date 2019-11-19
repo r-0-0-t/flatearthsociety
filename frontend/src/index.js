@@ -10,6 +10,7 @@ import Logout from "./Components/Auth/Logout";
 import Profile from "./Components/Auth/Profile";
 import UpdateProfile from "./Components/Auth/UpdateProfile";
 import Posts from "./Components/Posts/Posts";
+import Registration from "./Components/Auth/Registration";
 
 Axios.defaults.baseURL = "http://localhost:7000/api/v1/";
 
@@ -28,6 +29,7 @@ const app = (
       <Route exact path="/logout" component={Logout} />
       <Route exact path="/profile" component={Profile} />
       <Route path="/update" component={UpdateProfile} />
+      <Route path="/registration" component={Registration} />
       <Route path="/posts" component={Posts} />
     </Switch>
   </Router>

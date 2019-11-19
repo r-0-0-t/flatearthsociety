@@ -19,4 +19,7 @@ router.delete("/api/v1/posts/:id", PostsController.destroy);
 
 router.post("/api/v1/sessions", SessionsController.create);
 
+// router.post("/api/v1/ratings", RatingsController.create);
+// router.post("/api/v1/ratings", RatingsController.create);
+
 export default router;
