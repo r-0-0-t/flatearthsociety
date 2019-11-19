@@ -40,6 +40,7 @@
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.0",
     "jquery": "^3.4.1",
+    "jsonwebtoken": "^8.5.1",
     "mdbreact": "^4.22.1",
     "mini-css-extract-plugin": "0.8.0",
     "node-sass": "^4.13.0",

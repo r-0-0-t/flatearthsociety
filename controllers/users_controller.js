@@ -1,6 +1,6 @@
 import User from "../models/user";
 import Errors from "../lib/errors";
-import { encode } from "../lib/auth";
+import { encode, decode } from "../lib/auth";
 
 class UsersController {
   static index(request, response) {
@@ -47,10 +47,36 @@ class UsersController {
 
   static update(request, response) {
     //TODO Handle SQL Injection
+    if (request.body.username && request.body.password && request.body.email) {
+      let params = {
+        username: request.body.username,
+        password: md5(request.body.password),
+        email: request.body.email
+      };
+    } else if (request.body.username && request.body.password) {
+      let params = {
+        username: request.body.username,
+        password: md5(request.body.password)
+      };
+    } else if (request.body.password && request.body.email) {
+      let params = {
+        password: md5(request.body.password),
+        email: request.body.email
+      };
+    } else if (
+      request.body.password &&
+      !request.body.username &&
+      !request.body.email
+    ) {
+      let params = {
+        password: md5(request.body.password),
+        email: request.body.email
+      };
+    }
     let user = decode(request.headers.authorization);
     let user_id = request.params.id;
     if (user) {
-      if (user.id === user_id) {
+      if (user.id == user_id) {
         User.update(request.params.id, request.body, (error, results) => {
           if (error) {
             return Errors.respond_errors(response, error);
