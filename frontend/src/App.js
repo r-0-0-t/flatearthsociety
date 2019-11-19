@@ -43,6 +43,11 @@ class App extends Component {
               <Link to="/">Login</Link>
             </li>
           )}
+          {!this.state.loggedIn && (
+            <li>
+              <Link to="/registration">Registration</Link>
+            </li>
+          )}
           {
             <li>
               <Link to="/posts">Posts</Link>
