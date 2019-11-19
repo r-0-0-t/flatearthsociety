@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Axios from "axios";
+import { Link } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    const token = localStorage.getItem("token");
+
+    let loggedIn = true;
+    if (token == null) {
+      loggedIn = false;
+    }
+
+    this.state = {
+      loggedIn
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <ul>
+          {this.state.loggedIn && (
+            <li>
+              <Link to="/logout">Logout</Link>
+            </li>
+          )}
+          {this.state.loggedIn && (
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+          )}
+
+          {this.state.loggedIn && (
+            <li>
+              <Link to="/update">Update Profile</Link>
+            </li>
+          )}
+
+          {!this.state.loggedIn && (
+            <li>
+              <Link to="/">Login</Link>
+            </li>
+          )}
+          {
+            <li>
+              <Link to="/posts">Posts</Link>
+            </li>
+          }
+        </ul>
+      </div>
+    );
+  }
 }
 
 export default App;
